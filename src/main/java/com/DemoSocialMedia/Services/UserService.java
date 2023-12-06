@@ -24,4 +24,15 @@ public class UserService {
             return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
         }
     }
+
+    public ResponseEntity<?> loginUser(User user) {
+        User foundUser = userRepo.findByUsername(user.getUsername());
+        if (foundUser == null || !foundUser.getPassword().equals(user.getPassword())) {
+            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        }
+    }
+
+
 }
