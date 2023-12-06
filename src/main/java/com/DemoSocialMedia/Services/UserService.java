@@ -13,9 +13,15 @@ public class UserService {
     private final UserRepo userRepo;
     public ResponseEntity<?> registerUser(User user) {
         String email = user.getEmail();
-        if (userRepo.existsByEmail(email)) {
-            return new ResponseEntity<String>("Email already exists", HttpStatus.BAD_REQUEST);
+        String username = user.getUsername();
+        if (userRepo.existsByEmail(email) && userRepo.existsByUsername(username)) {
+            return new ResponseEntity<>("Email and username already exists", HttpStatus.BAD_REQUEST);
+        } else if  (userRepo.existsByEmail(email)) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        } else if (userRepo.existsByUsername(username)) {
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
     }
 }
