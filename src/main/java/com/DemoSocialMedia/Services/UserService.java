@@ -30,9 +30,19 @@ public class UserService {
         if (foundUser == null || !foundUser.getPassword().equals(user.getPassword())) {
             return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
         } else {
+            foundUser.setLoggedIn(true);
+            userRepo.save(foundUser);
             return new ResponseEntity<>(foundUser, HttpStatus.OK);
         }
     }
 
-
+    public ResponseEntity<?> deleteUser(long id) {
+        User loggedInUser = userRepo.findById(id).get();
+        if (!loggedInUser.isLoggedIn()) {
+            return new ResponseEntity<>("User not found or user not logged in", HttpStatus.NOT_FOUND);
+        } else {
+            userRepo.delete(loggedInUser);
+            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        }
+    }
 }

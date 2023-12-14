@@ -17,11 +17,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String email;
-    public String username;
-    public String password;
-    public String firstName;
-    public String lastName;
-    public long phoneNumber;
+    private long id;
+    private String email;
+    private String username;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private long phoneNumber;
+    private boolean isLoggedIn;
 }
