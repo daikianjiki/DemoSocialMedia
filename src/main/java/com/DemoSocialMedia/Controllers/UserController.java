@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"*"})
@@ -40,5 +42,15 @@ public class UserController {
     @PatchMapping("reactivate")
     public ResponseEntity<?> reactivateUser(@RequestBody User user) {
         return userService.reactivateUser(user);
+    }
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable long id) {
+        return userService.getUser(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<?>> getAllUsers() {
+        return userService.getAllUsers();
     }
 }

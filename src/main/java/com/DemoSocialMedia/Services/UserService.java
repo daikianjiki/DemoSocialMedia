@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -62,6 +64,7 @@ public class UserService {
             return new ResponseEntity<>("User not found or user not logged in", HttpStatus.NOT_FOUND);
         } else {
             loggedInUser.setUserActive(false);
+            loggedInUser.setLoggedIn(false);
             userRepo.save(loggedInUser);
             return new ResponseEntity<>("Username: " + loggedInUser.getUsername() +  ", has been deactivated", HttpStatus.OK);
         }
@@ -76,5 +79,14 @@ public class UserService {
             userRepo.save(foundUser);
             return new ResponseEntity<>("Username: " + foundUser.getUsername() + ", has been reactivated", HttpStatus.OK);
         }
+    }
+
+    public ResponseEntity<?> getUser(long id) {
+        User registeredUser = userRepo.findById(id).get();
+        return new ResponseEntity<>(registeredUser,HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<?>> getAllUsers() {
+        return new ResponseEntity<>(userRepo.findAll(), HttpStatus.OK);
     }
 }
