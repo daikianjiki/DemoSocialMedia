@@ -22,6 +22,11 @@ public class UserController {
         return userService.loginUser(user);
     }
 
+    @PatchMapping("logout/{id}")
+    public ResponseEntity<?> logoutUser(@PathVariable long id) {
+        return userService.logoutUser(id);
+    }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         return userService.deleteUser(id);

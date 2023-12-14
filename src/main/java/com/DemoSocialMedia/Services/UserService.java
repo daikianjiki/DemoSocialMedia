@@ -35,8 +35,15 @@ public class UserService {
         } else {
             foundUser.setLoggedIn(true);
             userRepo.save(foundUser);
-            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+            return new ResponseEntity<>("Welcome, " + foundUser.getFirstName() + "! You are logged in.", HttpStatus.OK);
         }
+    }
+
+    public ResponseEntity<?> logoutUser(long id) {
+        User loggedInUser = userRepo.findById(id).get();
+        loggedInUser.setLoggedIn(false);
+        userRepo.save(loggedInUser);
+        return new ResponseEntity<>("Goodbye, " + loggedInUser.getFirstName() + "! You have logged out.", HttpStatus.OK);
     }
 
     public ResponseEntity<?> deleteUser(long id) {
@@ -45,7 +52,7 @@ public class UserService {
             return new ResponseEntity<>("User not found or user not logged in", HttpStatus.NOT_FOUND);
         } else {
             userRepo.delete(loggedInUser);
-            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Username: " + loggedInUser.getUsername() +  ", deleted", HttpStatus.OK);
         }
     }
 
@@ -56,7 +63,7 @@ public class UserService {
         } else {
             loggedInUser.setUserActive(false);
             userRepo.save(loggedInUser);
-            return new ResponseEntity<>("User has been deactivated", HttpStatus.OK);
+            return new ResponseEntity<>("Username: " + loggedInUser.getUsername() +  ", has been deactivated", HttpStatus.OK);
         }
     }
 
@@ -67,7 +74,7 @@ public class UserService {
         } else {
             foundUser.setUserActive(true);
             userRepo.save(foundUser);
-            return new ResponseEntity<>("User has been reactivated", HttpStatus.OK);
+            return new ResponseEntity<>("Username: " + foundUser.getUsername() + ", has been reactivated", HttpStatus.OK);
         }
     }
 }
