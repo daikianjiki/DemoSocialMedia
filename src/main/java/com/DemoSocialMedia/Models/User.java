@@ -25,4 +25,5 @@ public class User {
     private String lastName;
     private long phoneNumber;
     private boolean isLoggedIn;
+    private boolean isUserActive = true;
 }

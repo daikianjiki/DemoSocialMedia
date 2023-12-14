@@ -27,6 +27,9 @@ public class UserService {
 
     public ResponseEntity<?> loginUser(User user) {
         User foundUser = userRepo.findByUsername(user.getUsername());
+        if (!foundUser.isUserActive()) {
+            return new ResponseEntity<>("User not active",HttpStatus.BAD_REQUEST);
+        }
         if (foundUser == null || !foundUser.getPassword().equals(user.getPassword())) {
             return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
         } else {
@@ -43,6 +46,28 @@ public class UserService {
         } else {
             userRepo.delete(loggedInUser);
             return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        }
+    }
+
+    public ResponseEntity<?> deactivateUser(long id) {
+        User loggedInUser = userRepo.findById(id).get();
+        if (!loggedInUser.isLoggedIn()) {
+            return new ResponseEntity<>("User not found or user not logged in", HttpStatus.NOT_FOUND);
+        } else {
+            loggedInUser.setUserActive(false);
+            userRepo.save(loggedInUser);
+            return new ResponseEntity<>("User has been deactivated", HttpStatus.OK);
+        }
+    }
+
+    public ResponseEntity<?> reactivateUser(User user) {
+        User foundUser = userRepo.findByUsername(user.getUsername());
+        if (foundUser == null || !foundUser.getPassword().equals(user.getPassword())) {
+            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+        } else {
+            foundUser.setUserActive(true);
+            userRepo.save(foundUser);
+            return new ResponseEntity<>("User has been reactivated", HttpStatus.OK);
         }
     }
 }
